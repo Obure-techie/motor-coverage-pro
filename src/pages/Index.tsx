@@ -1,14 +1,34 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { Dashboard } from "@/components/Dashboard";
+import { PolicyForm } from "@/components/PolicyForm";
+import { PolicySearch } from "@/components/PolicySearch";
+
+type View = "dashboard" | "new-policy" | "search-policies";
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const [currentView, setCurrentView] = useState<View>("dashboard");
+
+  const handleNavigate = (view: View) => {
+    setCurrentView(view);
+  };
+
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case "new-policy":
+        return <PolicyForm onBack={() => handleNavigate("dashboard")} />;
+      case "search-policies":
+        return <PolicySearch onBack={() => handleNavigate("dashboard")} />;
+      default:
+        return (
+          <Dashboard
+            onNewPolicy={() => handleNavigate("new-policy")}
+            onSearchPolicies={() => handleNavigate("search-policies")}
+          />
+        );
+    }
+  };
+
+  return renderCurrentView();
 };
 
 export default Index;
